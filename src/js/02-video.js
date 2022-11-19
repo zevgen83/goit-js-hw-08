@@ -4,18 +4,36 @@ import throttle from 'lodash.throttle';
 const iframe = document.querySelector('iframe');
 const player = new Player(iframe);
 
-const localKey = "videoplayer-current-time";
+const STORAGE_KEY = "videoplayer-current-time";
+
+const currentPlaybackPosition = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
 
 // player.on('play', function() {
 //     console.log('played the video!');
 // });
 
 function onPlay(evt) {
-    localStorage.setItem(localKey, evt.seconds);      
+    const positionPlayer = {
+        duration: evt.duration,
+        percent: evt.percent,
+        seconds: evt.seconds,
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(positionPlayer));      
 };
    
 player.on('timeupdate', throttle(onPlay, 1000));
 
-const currentPlaybackPosition = localStorage.getItem(localKey);
 
-player.setCurrentTime(currentPlaybackPosition);
+player.setCurrentTime(currentPlaybackPosition).then(function (seconds) {
+    seconds = currentPlaybackPosition.seconds;
+  })
+  .catch(function (error) {
+    switch (error.name) {
+      case 'RangeError':
+        'the time is less than 0 or greater than the videos duration';
+        break;
+      default:
+        'other error';
+        break;
+    }
+  });

@@ -24,7 +24,7 @@ function onPlay(evt) {
 player.on('timeupdate', throttle(onPlay, 1000));
 
 
-player.setCurrentTime(currentPlaybackPosition).then(function (seconds) {
+player.setCurrentTime(currentPlaybackPosition.seconds).then(function (seconds) {
     seconds = currentPlaybackPosition.seconds;
   })
   .catch(function (error) {

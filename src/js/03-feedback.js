@@ -25,7 +25,7 @@ function onTextForm(evt) {
 }
 
 function handleSubmit(evt) {  
-  if (!valueFromStorage.email && !valueFromStorage.message) {
+  if (!valueFromStorage.email || !valueFromStorage.message) {
     return alert("All fields must be filled!!!!");
   }
   evt.preventDefault();
